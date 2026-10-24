@@ -5,7 +5,6 @@ import {
   Easing,
   Img,
   interpolate,
-  random,
   Sequence,
   staticFile,
   useCurrentFrame,
@@ -14,14 +13,67 @@ import {
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const font = '"Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif';
+const ease = Easing.bezier(0.22, 0.72, 0.18, 1);
 
-const opacityWindow = (frame: number, start: number, fadeIn: number, end: number, fadeOut: number) =>
+const fadeWindow = (frame: number, start: number, fadeIn: number, end: number, fadeOut: number) =>
   interpolate(frame, [start, start + fadeIn, end - fadeOut, end], [0, 1, 1, 0], clamp);
 
-const DeepBackground: React.FC<{glowX?: number; glowY?: number}> = ({glowX = 50, glowY = 48}) => (
+const Plate: React.FC<{
+  src: string;
+  progress: number;
+  fromScale?: number;
+  toScale?: number;
+  fromX?: number;
+  toX?: number;
+  fromY?: number;
+  toY?: number;
+  opacity?: number;
+  blur?: number;
+  brightness?: number;
+  saturate?: number;
+  origin?: string;
+}> = ({
+  src,
+  progress,
+  fromScale = 1,
+  toScale = 1.08,
+  fromX = 0,
+  toX = 0,
+  fromY = 0,
+  toY = 0,
+  opacity = 1,
+  blur = 0,
+  brightness = 1,
+  saturate = 1,
+  origin = '50% 50%',
+}) => {
+  const p = ease(progress);
+  const scale = interpolate(p, [0, 1], [fromScale, toScale]);
+  const x = interpolate(p, [0, 1], [fromX, toX]);
+  const y = interpolate(p, [0, 1], [fromY, toY]);
+  return (
+    <Img
+      src={staticFile(src)}
+      style={{
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        objectFit: 'cover',
+        transformOrigin: origin,
+        transform: `translate3d(${x}px, ${y}px, 0) scale(${scale})`,
+        opacity,
+        filter: `blur(${blur}px) brightness(${brightness}) saturate(${saturate})`,
+      }}
+    />
+  );
+};
+
+const Grade: React.FC<{dark?: number; blue?: number}> = ({dark = 0.12, blue = 0.08}) => (
   <AbsoluteFill
     style={{
-      background: `radial-gradient(circle at ${glowX}% ${glowY}%, #0e5b80 0%, #062c50 22%, #020e24 58%, #010611 100%)`,
+      background: `radial-gradient(ellipse at 50% 44%, transparent 30%, rgba(0,4,14,${dark}) 100%), linear-gradient(180deg, rgba(1,10,24,${blue}) 0%, transparent 42%, rgba(0,4,12,.2) 100%)`,
+      pointerEvents: 'none',
     }}
   />
 );
@@ -30,17 +82,18 @@ const Subtitle: React.FC<{children: React.ReactNode; opacity: number}> = ({child
   <div
     style={{
       position: 'absolute',
-      left: 120,
-      right: 120,
-      bottom: 68,
+      left: 150,
+      right: 150,
+      bottom: 62,
       textAlign: 'center',
-      color: '#f4fbff',
+      color: '#f6fbff',
       fontFamily: font,
-      fontSize: 46,
-      fontWeight: 600,
+      fontSize: 44,
+      lineHeight: 1.35,
+      fontWeight: 560,
       letterSpacing: 2,
       opacity,
-      textShadow: '0 3px 20px rgba(0,0,0,.9), 0 1px 4px rgba(0,0,0,.95)',
+      textShadow: '0 3px 24px rgba(0,0,0,.94), 0 1px 5px rgba(0,0,0,.98)',
     }}
   >
     {children}
@@ -51,77 +104,23 @@ const CornerTitle: React.FC<{children: React.ReactNode; opacity: number}> = ({ch
   <div
     style={{
       position: 'absolute',
-      right: 84,
-      top: 68,
-      color: 'white',
+      right: 76,
+      top: 64,
+      color: '#f7fbff',
       fontFamily: font,
-      fontSize: 52,
-      fontWeight: 700,
-      letterSpacing: 3,
+      fontSize: 48,
+      fontWeight: 650,
+      letterSpacing: 4,
       opacity,
-      textShadow: '0 3px 18px rgba(0,0,0,.9)',
+      textShadow: '0 3px 22px rgba(0,0,0,.9)',
     }}
   >
     {children}
   </div>
 );
 
-const ParticleField: React.FC<{
-  count: number;
-  color?: string;
-  spread?: number;
-  speed?: number;
-  brightness?: number;
-  seed: string;
-}> = ({count, color = '#92dcff', spread = 1, speed = 1, brightness = 1, seed}) => {
-  const frame = useCurrentFrame();
-  return (
-    <AbsoluteFill>
-      {Array.from({length: count}).map((_, i) => {
-        const x = random(`${seed}-x-${i}`) * 1920;
-        const y = random(`${seed}-y-${i}`) * 1080;
-        const depth = 0.25 + random(`${seed}-z-${i}`) * 0.75;
-        const size = 2 + depth * 9;
-        const driftX = Math.sin(frame * 0.012 * speed + i * 1.7) * 24 * depth * spread;
-        const driftY = Math.cos(frame * 0.009 * speed + i * 1.13) * 20 * depth * spread;
-        const pulse = 0.55 + 0.45 * Math.sin(frame * 0.028 + i * 2.1);
-        return (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: x,
-              top: y,
-              width: size,
-              height: size,
-              borderRadius: '50%',
-              backgroundColor: color,
-              opacity: (0.25 + depth * 0.55) * (0.75 + pulse * 0.25),
-              translate: `${driftX}px ${driftY}px`,
-              boxShadow: `0 0 ${10 + size * 2}px rgba(102,207,255,${0.35 * brightness})`,
-            }}
-          />
-        );
-      })}
-    </AbsoluteFill>
-  );
-};
-
-const HeroMolecule: React.FC<{progress: number}> = ({progress}) => {
-  const frame = useCurrentFrame();
-  const bob = Math.sin(frame / 18) * 14;
-  return (
-    <div style={{position: 'absolute', left: 960, top: 500, translate: `-50% calc(-50% + ${bob}px)`, scale: 0.75 + progress * 0.45}}>
-      <div style={{position: 'absolute', left: -98, top: 36, width: 120, height: 8, rotate: '-27deg', backgroundColor: 'rgba(145,220,255,.5)', boxShadow: '0 0 16px #5ac8ff'}} />
-      <div style={{position: 'absolute', left: 20, top: 36, width: 120, height: 8, rotate: '27deg', backgroundColor: 'rgba(145,220,255,.5)', boxShadow: '0 0 16px #5ac8ff'}} />
-      <div style={{position: 'absolute', left: -70, top: -70, width: 140, height: 140, borderRadius: '50%', background: 'radial-gradient(circle at 36% 30%, #effcff, #37a7dc 42%, #07375b 75%)', boxShadow: '0 0 55px rgba(72,190,255,.8)'}} />
-      <div style={{position: 'absolute', left: -154, top: 45, width: 72, height: 72, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, white, #8ed9ff 48%, #174f75)', boxShadow: '0 0 28px rgba(123,216,255,.7)'}} />
-      <div style={{position: 'absolute', left: 82, top: 45, width: 72, height: 72, borderRadius: '50%', background: 'radial-gradient(circle at 35% 30%, white, #8ed9ff 48%, #174f75)', boxShadow: '0 0 28px rgba(123,216,255,.7)'}} />
-    </div>
-  );
-};
-
 const IntroVideo: React.FC = () => {
+  const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
   return (
     <AbsoluteFill>
@@ -129,9 +128,13 @@ const IntroVideo: React.FC = () => {
         src={staticFile('assets/shot01.mp4')}
         trimAfter={7 * fps}
         objectFit="cover"
-        volume={(f) => interpolate(f, [0, 0.75 * fps, 3.25 * fps, 5.5 * fps, 7 * fps], [1, 1, 0.68, 0.16, 0], clamp)}
+        volume={(f) => interpolate(f, [0, 0.75 * fps, 3.25 * fps, 5.5 * fps, 7 * fps], [0.85, 0.85, 0.52, 0.12, 0], clamp)}
         style={{width: '100%', height: '100%'}}
       />
+      <Grade dark={0.1} blue={0.01} />
+      <CornerTitle opacity={fadeWindow(frame, 0.12 * fps, 0.42 * fps, 2.25 * fps, 0.55 * fps)}>
+        一杯普通的水
+      </CornerTitle>
     </AbsoluteFill>
   );
 };
@@ -139,16 +142,44 @@ const IntroVideo: React.FC = () => {
 const MicroScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const push = interpolate(frame, [0, 7 * fps], [0.35, 1], {...clamp, easing: Easing.bezier(0.3, 0, 0.1, 1)});
+  const p = interpolate(frame, [0, 7 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.55 * fps, 1.7 * fps], [0, 1], clamp);
+  const numberP = interpolate(frame, [3.45 * fps, 4.5 * fps], [0, 1], {...clamp, easing: ease});
   return (
-    <AbsoluteFill style={{opacity: interpolate(frame, [0, 0.7 * fps], [0, 1], clamp)}}>
-      <DeepBackground glowX={62} glowY={52} />
-      <ParticleField count={105} seed="micro" spread={0.45 + push} speed={0.65} />
-      <HeroMolecule progress={push} />
-      <CornerTitle opacity={opacityWindow(frame, 0.2 * fps, 0.5 * fps, 2.7 * fps, 0.5 * fps)}>其中一滴水</CornerTitle>
-      <Subtitle opacity={opacityWindow(frame, 0.7 * fps, 0.35 * fps, 2.6 * fps, 0.45 * fps)}>里面是？</Subtitle>
-      <Subtitle opacity={opacityWindow(frame, 2.65 * fps, 0.6 * fps, 6.8 * fps, 0.5 * fps)}>
-        一滴水里，大约有 <span style={{fontSize: 64, fontWeight: 800, color: '#9ce8ff'}}>10<sup style={{fontSize: 36}}>21</sup></span> 个水分子
+    <AbsoluteFill style={{backgroundColor: '#020712'}}>
+      <Plate
+        src="assets/refined/intro-last.png"
+        progress={interpolate(frame, [0, 1.55 * fps], [0, 1], clamp)}
+        fromScale={1}
+        toScale={5.6}
+        origin="62.5% 30%"
+        opacity={1 - handoff}
+        brightness={interpolate(handoff, [0, 1], [1, 0.55])}
+      />
+      <Plate
+        src="assets/refined/micro-entry.png"
+        progress={p}
+        fromScale={0.98}
+        toScale={1.19}
+        fromX={18}
+        toX={-28}
+        fromY={8}
+        toY={-16}
+        opacity={handoff}
+        brightness={0.88 + handoff * 0.12}
+        saturate={0.9}
+      />
+      <Grade dark={0.24} blue={0.12} />
+      <CornerTitle opacity={fadeWindow(frame, 0.4 * fps, 0.45 * fps, 2.65 * fps, 0.5 * fps)}>
+        其中一滴水
+      </CornerTitle>
+      <Subtitle opacity={fadeWindow(frame, 0.8 * fps, 0.35 * fps, 2.65 * fps, 0.45 * fps)}>里面是？</Subtitle>
+      <Subtitle opacity={fadeWindow(frame, 2.75 * fps, 0.55 * fps, 6.75 * fps, 0.55 * fps)}>
+        一滴水里，大约有{' '}
+        <span style={{display: 'inline-block', color: '#d7f5ff', fontSize: 61, fontWeight: 720, transform: `scale(${0.92 + numberP * 0.08})`, opacity: numberP}}>
+          10<sup style={{fontSize: 33}}>21</sup>
+        </span>{' '}
+        个水分子
       </Subtitle>
     </AbsoluteFill>
   );
@@ -157,48 +188,43 @@ const MicroScene: React.FC = () => {
 const MoleculeWaveScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const transfer = interpolate(frame, [0.7 * fps, 7.5 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.25, 0.1, 0.2, 1)});
+  const p = interpolate(frame, [0, 10 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.45 * fps, 1.7 * fps], [0, 1], clamp);
+  const pulse = interpolate(frame, [1.4 * fps, 3.0 * fps, 5.0 * fps, 7.0 * fps], [0.8, 1.04, 0.92, 1], clamp);
   return (
-    <AbsoluteFill>
-      <DeepBackground glowX={48} glowY={48} />
-      <ParticleField count={145} seed="wave" spread={0.5 + transfer * 1.1} speed={1.3} brightness={1.2} />
-      <HeroMolecule progress={0.2 + transfer * 0.25} />
-      {[0, 1, 2, 3].map((i) => {
-        const p = interpolate(frame, [(1.6 + i * 1.15) * fps, (5.4 + i * 1.15) * fps], [0, 1], clamp);
-        return (
-          <div
-            key={i}
-            style={{
-              position: 'absolute',
-              left: '50%',
-              top: '51%',
-              width: 480,
-              height: 220,
-              border: '3px solid rgba(112,214,255,.55)',
-              borderRadius: '50%',
-              translate: '-50% -50%',
-              scale: 0.25 + p * 3.4,
-              opacity: (1 - p) * 0.72,
-              boxShadow: '0 0 28px rgba(70,190,255,.35)',
-            }}
-          />
-        );
-      })}
-      <Subtitle opacity={opacityWindow(frame, 0.6 * fps, 0.5 * fps, 5.0 * fps, 0.6 * fps)}>一个分子的运动，传递给周围的每一个邻居。</Subtitle>
+    <AbsoluteFill style={{backgroundColor: '#020712'}}>
+      <Plate src="assets/refined/micro-entry.png" progress={p} fromScale={1.19} toScale={1.28} opacity={1 - handoff} brightness={0.92} saturate={0.9} />
+      <Plate
+        src="assets/refined/micro-wave.png"
+        progress={p}
+        fromScale={1.06}
+        toScale={1.24}
+        fromX={28}
+        toX={-42}
+        fromY={-8}
+        toY={18}
+        opacity={handoff}
+        brightness={pulse}
+        saturate={0.88}
+      />
+      <Grade dark={0.25} blue={0.11} />
+      <Subtitle opacity={fadeWindow(frame, 0.6 * fps, 0.55 * fps, 5.0 * fps, 0.7 * fps)}>
+        一个分子的运动，传递给周围的每一个邻居。
+      </Subtitle>
       <div
         style={{
           position: 'absolute',
-          left: 0,
-          right: 0,
-          top: 155,
-          textAlign: 'center',
-          color: '#eafaff',
+          left: 104,
+          top: 142,
+          width: 1080,
+          color: '#f3fbff',
           fontFamily: font,
-          fontSize: 66,
-          fontWeight: 800,
-          letterSpacing: 7,
-          opacity: opacityWindow(frame, 5.1 * fps, 0.8 * fps, 9.8 * fps, 0.8 * fps),
-          textShadow: '0 0 30px rgba(90,210,255,.55)',
+          fontSize: 67,
+          lineHeight: 1.24,
+          fontWeight: 690,
+          letterSpacing: 6,
+          opacity: fadeWindow(frame, 5.05 * fps, 0.8 * fps, 9.75 * fps, 0.75 * fps),
+          textShadow: '0 4px 30px rgba(0,0,0,.9)',
         }}
       >
         庞大，由无数微小组成。
@@ -210,34 +236,74 @@ const MoleculeWaveScene: React.FC = () => {
 const StarMorphScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const morph = interpolate(frame, [0, 10.5 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.2, 0.8, 0.15, 1)});
+  const p = interpolate(frame, [0, 11 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.35 * fps, 2.2 * fps], [0, 1], clamp);
   return (
-    <AbsoluteFill>
-      <DeepBackground glowX={50 - morph * 18} glowY={50} />
-      <ParticleField count={170} seed="stars" spread={0.8 + morph * 2.8} speed={0.7 + morph} color={morph > 0.5 ? '#f3f8ff' : '#86dcff'} brightness={1.7} />
-      <div style={{position: 'absolute', left: 960, top: 520, width: 720, height: 720, borderRadius: '50%', translate: '-50% -50%', scale: 0.2 + morph * 2.4, opacity: (1 - morph) * 0.6, background: 'radial-gradient(circle, rgba(103,216,255,.35), rgba(14,82,129,.08) 48%, transparent 70%)'}} />
-      <Subtitle opacity={opacityWindow(frame, 0.6 * fps, 0.7 * fps, 10.6 * fps, 0.8 * fps)}>当我们不断缩小，微观世界也像一片星海。</Subtitle>
+    <AbsoluteFill style={{backgroundColor: '#01040a'}}>
+      <Plate src="assets/refined/micro-wave.png" progress={p} fromScale={1.24} toScale={1.3} opacity={1 - handoff} brightness={0.9} saturate={0.85} />
+      <Plate
+        src="assets/refined/water-to-stars.png"
+        progress={p}
+        fromScale={1.12}
+        toScale={0.97}
+        fromX={-36}
+        toX={42}
+        opacity={handoff}
+        brightness={0.9}
+        saturate={0.86}
+      />
+      <Grade dark={0.2} blue={0.08} />
+      <Subtitle opacity={fadeWindow(frame, 0.65 * fps, 0.65 * fps, 10.65 * fps, 0.75 * fps)}>
+        当我们不断缩小，微观世界也像一片星海。
+      </Subtitle>
     </AbsoluteFill>
   );
 };
 
+const ScaleMark: React.FC<{children: React.ReactNode; opacity: number; top: number}> = ({children, opacity, top}) => (
+  <div
+    style={{
+      position: 'absolute',
+      left: 86,
+      top,
+      color: 'rgba(220,241,249,.82)',
+      fontFamily: font,
+      fontSize: 23,
+      fontWeight: 480,
+      letterSpacing: 2.5,
+      opacity,
+      textShadow: '0 2px 12px rgba(0,0,0,.9)',
+    }}
+  >
+    {children}
+  </div>
+);
+
 const SolarSystemScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const reveal = interpolate(frame, [0, 2.3 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.2, 0.8, 0.2, 1)});
-  const travel = interpolate(frame, [1.6 * fps, 8.7 * fps], [0, 1], clamp);
+  const p = interpolate(frame, [0, 9 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.35 * fps, 1.8 * fps], [0, 1], clamp);
   return (
-    <AbsoluteFill>
-      <DeepBackground glowX={22} glowY={48} />
-      <ParticleField count={115} seed="solar-stars" spread={2.2} speed={0.35} color="#f7fbff" brightness={1.4} />
-      <div style={{position: 'absolute', left: 330, top: 535, width: 230, height: 230, borderRadius: '50%', translate: '-50% -50%', background: 'radial-gradient(circle at 35% 35%, #fff9cc, #ffc34f 33%, #ff7d1a 65%, #9d2608)', boxShadow: '0 0 60px #ff9f31, 0 0 160px rgba(255,119,20,.5)', opacity: reveal}} />
-      {[540, 750, 980, 1240].map((width, i) => (
-        <div key={width} style={{position: 'absolute', left: 330, top: 535, width, height: width * 0.32, border: '2px solid rgba(120,190,230,.22)', borderRadius: '50%', translate: '-50% -50%', rotate: '-8deg', opacity: reveal}} />
-      ))}
-      <div style={{position: 'absolute', left: 330 + 760 * travel, top: 480 + Math.sin(travel * Math.PI * 2) * 75, width: 116, height: 116, borderRadius: '50%', background: 'radial-gradient(circle at 32% 30%, #d9ffff, #2688c2 37%, #124c72 58%, #07192d 78%)', boxShadow: '0 0 34px rgba(83,187,240,.7)', opacity: reveal}} />
-      <div style={{position: 'absolute', left: 1100, top: 245, color: '#9ddcf7', fontFamily: font, fontSize: 25, letterSpacing: 2, opacity: opacityWindow(frame, 2.0 * fps, 0.5 * fps, 5.2 * fps, 0.5 * fps)}}>10⁷ m · 地球</div>
-      <div style={{position: 'absolute', left: 1210, top: 310, color: '#9ddcf7', fontFamily: font, fontSize: 25, letterSpacing: 2, opacity: opacityWindow(frame, 4.8 * fps, 0.5 * fps, 8.6 * fps, 0.5 * fps)}}>10¹¹ m · 太阳系</div>
-      <Subtitle opacity={opacityWindow(frame, 0.8 * fps, 0.6 * fps, 8.6 * fps, 0.7 * fps)}>一个个体，也处在更大的系统里。</Subtitle>
+    <AbsoluteFill style={{backgroundColor: '#01040a'}}>
+      <Plate src="assets/refined/water-to-stars.png" progress={p} fromScale={0.97} toScale={0.9} opacity={1 - handoff} brightness={0.82} />
+      <Plate
+        src="assets/refined/earth-system.png"
+        progress={p}
+        fromScale={1.18}
+        toScale={0.98}
+        fromX={60}
+        toX={-18}
+        opacity={handoff}
+        brightness={0.87}
+        saturate={0.82}
+      />
+      <Grade dark={0.25} blue={0.1} />
+      <ScaleMark top={86} opacity={fadeWindow(frame, 1.4 * fps, 0.45 * fps, 4.4 * fps, 0.45 * fps)}>地球尺度 · 10⁷ m</ScaleMark>
+      <ScaleMark top={128} opacity={fadeWindow(frame, 4.1 * fps, 0.45 * fps, 8.3 * fps, 0.55 * fps)}>太阳系尺度 · 10¹¹ m</ScaleMark>
+      <Subtitle opacity={fadeWindow(frame, 0.75 * fps, 0.6 * fps, 8.6 * fps, 0.7 * fps)}>
+        一个个体，也处在更大的系统里。
+      </Subtitle>
     </AbsoluteFill>
   );
 };
@@ -245,24 +311,26 @@ const SolarSystemScene: React.FC = () => {
 const GalaxyScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const reveal = interpolate(frame, [0, 5.4 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.2, 0.8, 0.1, 1)});
+  const p = interpolate(frame, [0, 7 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.35 * fps, 1.8 * fps], [0, 1], clamp);
   return (
-    <AbsoluteFill>
-      <DeepBackground glowX={50} glowY={50} />
-      <ParticleField count={95} seed="deep-space" spread={3} speed={0.25} color="#fff5dc" brightness={1.2} />
-      <div style={{position: 'absolute', left: 960, top: 520, width: 1250, height: 580, translate: '-50% -50%', rotate: `${-18 + reveal * 8}deg`, scale: 0.15 + reveal * 0.9, opacity: reveal}}>
-        {Array.from({length: 230}).map((_, i) => {
-          const arm = i % 4;
-          const radius = Math.pow(random(`gal-r-${i}`), 0.72) * 560;
-          const angle = radius * 0.022 + arm * Math.PI * 0.5 + random(`gal-a-${i}`) * 0.7;
-          const x = 625 + Math.cos(angle) * radius;
-          const y = 290 + Math.sin(angle) * radius * 0.34;
-          const size = 2 + random(`gal-s-${i}`) * 6;
-          return <div key={i} style={{position: 'absolute', left: x, top: y, width: size, height: size, borderRadius: '50%', backgroundColor: i % 9 === 0 ? '#ffd7a8' : '#d9ecff', opacity: 0.35 + random(`gal-o-${i}`) * 0.65, boxShadow: `0 0 ${size * 3}px rgba(170,216,255,.8)`}} />;
-        })}
-        <div style={{position: 'absolute', left: 525, top: 210, width: 200, height: 150, borderRadius: '50%', background: 'radial-gradient(ellipse, #fff8d5, #9bd7ff 28%, rgba(55,120,190,.3) 58%, transparent 74%)', boxShadow: '0 0 70px rgba(109,185,255,.65)'}} />
-      </div>
-      <Subtitle opacity={opacityWindow(frame, 0.7 * fps, 0.7 * fps, 6.8 * fps, 0.7 * fps)}>更大的整体，也由无数个体组成。</Subtitle>
+    <AbsoluteFill style={{backgroundColor: '#010306'}}>
+      <Plate src="assets/refined/earth-system.png" progress={p} fromScale={0.98} toScale={0.72} opacity={1 - handoff} brightness={0.76} saturate={0.74} />
+      <Plate
+        src="assets/refined/galaxy.png"
+        progress={p}
+        fromScale={1.2}
+        toScale={0.98}
+        fromX={-28}
+        toX={16}
+        opacity={handoff}
+        brightness={0.88}
+        saturate={0.78}
+      />
+      <Grade dark={0.24} blue={0.07} />
+      <Subtitle opacity={fadeWindow(frame, 0.7 * fps, 0.65 * fps, 6.75 * fps, 0.65 * fps)}>
+        更大的整体，也由无数个体组成。
+      </Subtitle>
     </AbsoluteFill>
   );
 };
@@ -270,18 +338,29 @@ const GalaxyScene: React.FC = () => {
 const ReturnScene: React.FC = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const arrival = interpolate(frame, [0, 2.6 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.12, 0.75, 0.12, 1)});
-  const fadeToBlack = interpolate(frame, [3.35 * fps, 3.5 * fps], [1, 0], clamp);
+  const p = interpolate(frame, [0, 3.45 * fps], [0, 1], clamp);
+  const handoff = interpolate(frame, [0.65 * fps, 2.15 * fps], [0, 1], clamp);
+  const fadeBlack = interpolate(frame, [3.45 * fps, 3.5 * fps], [0, 1], clamp);
   return (
-    <AbsoluteFill style={{backgroundColor: '#010713'}}>
-      <ParticleField count={90} seed="return-stars" spread={4 - arrival * 3} speed={2.2} color="#dff5ff" brightness={1.5} />
-      <Img src={staticFile('assets/drop-return.png')} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', opacity: arrival * fadeToBlack, scale: 1 + arrival * 0.08, filter: `blur(${(1 - arrival) * 11}px) brightness(${0.28 + arrival * 0.34}) saturate(.72)`}} />
-      <AbsoluteFill style={{backgroundColor: '#00132d', mixBlendMode: 'color', opacity: arrival * 0.72 * fadeToBlack}} />
-      <div style={{position: 'absolute', inset: 0, clipPath: 'circle(112px at 68.5% 55%)', opacity: arrival * fadeToBlack}}>
-        <Img src={staticFile('assets/drop-return.png')} style={{width: '100%', height: '100%', objectFit: 'cover', scale: 1 + arrival * 0.08, filter: 'brightness(1.12) saturate(1.08)'}} />
-      </div>
-      <Subtitle opacity={opacityWindow(frame, 0.35 * fps, 0.65 * fps, 3.25 * fps, 0.45 * fps) * fadeToBlack}>一滴水很小，却藏着一个世界。</Subtitle>
-      <AbsoluteFill style={{backgroundColor: 'black', opacity: 1 - fadeToBlack}} />
+    <AbsoluteFill style={{backgroundColor: '#000'}}>
+      <Plate src="assets/refined/galaxy.png" progress={p} fromScale={0.98} toScale={2.3} opacity={1 - handoff} brightness={0.78} saturate={0.72} />
+      <Plate
+        src="assets/refined/drop-final.png"
+        progress={p}
+        fromScale={1.7}
+        toScale={1.02}
+        fromX={-110}
+        toX={0}
+        opacity={handoff * (1 - fadeBlack)}
+        blur={interpolate(handoff, [0, 1], [9, 0])}
+        brightness={0.76}
+        saturate={0.72}
+      />
+      <Grade dark={0.32} blue={0.16} />
+      <Subtitle opacity={fadeWindow(frame, 1.25 * fps, 0.55 * fps, 3.35 * fps, 0.45 * fps) * (1 - fadeBlack)}>
+        一滴水很小，却藏着一个世界。
+      </Subtitle>
+      <AbsoluteFill style={{backgroundColor: '#000', opacity: fadeBlack}} />
     </AbsoluteFill>
   );
 };
@@ -289,7 +368,7 @@ const ReturnScene: React.FC = () => {
 export const FinalFilm: React.FC = () => {
   const {fps} = useVideoConfig();
   return (
-    <AbsoluteFill style={{backgroundColor: 'black'}}>
+    <AbsoluteFill style={{backgroundColor: '#000'}}>
       <Sequence from={0} durationInFrames={7 * fps} premountFor={fps}><IntroVideo /></Sequence>
       <Sequence from={7 * fps} durationInFrames={7 * fps} premountFor={fps}><MicroScene /></Sequence>
       <Sequence from={14 * fps} durationInFrames={10 * fps} premountFor={fps}><MoleculeWaveScene /></Sequence>
@@ -297,7 +376,7 @@ export const FinalFilm: React.FC = () => {
       <Sequence from={35 * fps} durationInFrames={9 * fps} premountFor={fps}><SolarSystemScene /></Sequence>
       <Sequence from={44 * fps} durationInFrames={7 * fps} premountFor={fps}><GalaxyScene /></Sequence>
       <Sequence from={51 * fps} durationInFrames={4 * fps} premountFor={fps}><ReturnScene /></Sequence>
-      <Audio src={staticFile('assets/cosmic-score.m4a')} volume={0.78} />
+      <Audio src={staticFile('assets/cosmic-score.m4a')} volume={0.72} />
     </AbsoluteFill>
   );
 };
