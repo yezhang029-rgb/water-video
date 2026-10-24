@@ -1,6 +1,7 @@
 import React from 'react';
 import {AbsoluteFill, Composition, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Audio} from '@remotion/media';
+import {FinalFilm} from './FinalFilm';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const fontFamily = '"Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif';
@@ -172,6 +173,14 @@ export const RemotionRoot: React.FC = () => (
       id="PourShot"
       component={PourShot}
       durationInFrames={210}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="FinalFilm"
+      component={FinalFilm}
+      durationInFrames={1650}
       fps={30}
       width={1920}
       height={1080}

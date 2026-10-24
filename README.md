@@ -8,6 +8,15 @@ npm run typecheck
 npm run build
 npm run render
 npm run render:pour
+npm run render:preview
+npm run render:final
 ```
 
-The original sample is written to `out/water-sample.mp4`. The seven-second café pour shot is written to `out/cafe-pour-shot.mp4`.
+Outputs:
+
+- `out/water-sample.mp4` — original eight-second sample
+- `out/cafe-pour-shot.mp4` — seven-second café pour shot
+- `out/water-final-55s-preview.mp4` — half-resolution review render
+- `out/water-final-55s.mp4` — 1920×1080 final film
+
+The 55-second film uses `public/assets/shot01.mp4` for its complete opening seven seconds.
