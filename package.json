@@ -5,7 +5,8 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "build": "remotion bundle src/index.ts",
-    "render": "remotion render src/index.ts WaterSample out/water-sample.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium"
+    "render": "remotion render src/index.ts WaterSample out/water-sample.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium",
+    "render:pour": "remotion render src/index.ts PourShot out/cafe-pour-shot.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium"
   },
   "dependencies": {
     "@remotion/cli": "4.0.534",

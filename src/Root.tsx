@@ -117,13 +117,64 @@ export const WaterSample: React.FC = () => {
   );
 };
 
-export const RemotionRoot: React.FC = () => (
-  <Composition
-    id="WaterSample"
-    component={WaterSample}
-    durationInFrames={240}
-    fps={30}
-    width={1920}
-    height={1080}
+const PourImage: React.FC<{src: string; opacity: number; blur?: number; scale?: number}> = ({src, opacity, blur = 0, scale = 1}) => (
+  <Img
+    src={staticFile(src)}
+    style={{
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      opacity,
+      scale,
+      filter: `blur(${blur}px)`,
+    }}
   />
+);
+
+export const PourShot: React.FC = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const fade1 = interpolate(frame, [0.6 * fps, 1.65 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.45, 0, 0.25, 1)});
+  const fade2 = interpolate(frame, [1.8 * fps, 3.35 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.45, 0, 0.25, 1)});
+  const fade3 = interpolate(frame, [3.5 * fps, 5.15 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.45, 0, 0.25, 1)});
+  const fade4 = interpolate(frame, [5.0 * fps, 6.55 * fps], [0, 1], {...clamp, easing: Easing.bezier(0.35, 0, 0.15, 1)});
+  const softTransition = Math.max(
+    Math.sin(fade1 * Math.PI),
+    Math.sin(fade2 * Math.PI),
+    Math.sin(fade3 * Math.PI),
+    Math.sin(fade4 * Math.PI),
+  );
+
+  return (
+    <AbsoluteFill style={{backgroundColor: '#1a120d', overflow: 'hidden'}}>
+      <PourImage src="keyframe-01.png" opacity={1 - fade1} blur={softTransition * 0.8} />
+      <PourImage src="pour-01.png" opacity={fade1 * (1 - fade2)} blur={softTransition * 0.8} />
+      <PourImage src="pour-02.png" opacity={fade2 * (1 - fade3)} blur={softTransition * 0.8} />
+      <PourImage src="pour-03.png" opacity={fade3 * (1 - fade4)} blur={softTransition * 0.9} />
+      <PourImage src="pour-04.png" opacity={fade4} blur={(1 - fade4) * 0.7} scale={1 + Math.max(0, fade4 - 0.75) * 0.016} />
+      <Audio src={staticFile('pour-soundtrack.wav')} volume={0.85} />
+    </AbsoluteFill>
+  );
+};
+
+export const RemotionRoot: React.FC = () => (
+  <>
+    <Composition
+      id="WaterSample"
+      component={WaterSample}
+      durationInFrames={240}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="PourShot"
+      component={PourShot}
+      durationInFrames={210}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+  </>
 );
