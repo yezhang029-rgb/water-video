@@ -8,7 +8,10 @@
     "render": "remotion render src/index.ts WaterSample out/water-sample.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium",
     "render:pour": "remotion render src/index.ts PourShot out/cafe-pour-shot.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium",
     "render:preview": "remotion render src/index.ts FinalFilm out/water-final-55s-preview.mp4 --codec=h264 --crf=26 --scale=0.5 --browser-executable=/usr/bin/chromium --concurrency=2",
-    "render:final": "remotion render src/index.ts FinalFilm out/water-final-55s.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium --concurrency=2"
+    "render:final": "remotion render src/index.ts FinalFilm out/water-final-55s.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium --concurrency=2",
+    "render:preview:a": "remotion render src/index.ts FinalFilm out/water-final-55s-A-preview.mp4 --codec=h264 --crf=25 --scale=0.5 --browser-executable=/usr/bin/chromium --concurrency=2",
+    "render:final:a": "remotion render src/index.ts FinalFilm out/water-final-55s-A.mp4 --codec=h264 --crf=18 --browser-executable=/usr/bin/chromium --concurrency=4",
+    "audio": "scripts/generate-soundtrack.sh"
   },
   "dependencies": {
     "@remotion/cli": "4.0.534",

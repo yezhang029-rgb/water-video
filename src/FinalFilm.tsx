@@ -125,7 +125,7 @@ const IntroVideo: React.FC = () => {
   return (
     <AbsoluteFill>
       <Video
-        src={staticFile('assets/shot01.mp4')}
+        src={staticFile('assets/shot01-v2.mp4')}
         trimAfter={7 * fps}
         objectFit="cover"
         volume={(f) => interpolate(f, [0, 0.75 * fps, 3.25 * fps, 5.5 * fps, 7 * fps], [0.85, 0.85, 0.52, 0.12, 0], clamp)}
@@ -376,7 +376,17 @@ export const FinalFilm: React.FC = () => {
       <Sequence from={35 * fps} durationInFrames={9 * fps} premountFor={fps}><SolarSystemScene /></Sequence>
       <Sequence from={44 * fps} durationInFrames={7 * fps} premountFor={fps}><GalaxyScene /></Sequence>
       <Sequence from={51 * fps} durationInFrames={4 * fps} premountFor={fps}><ReturnScene /></Sequence>
-      <Audio src={staticFile('assets/cosmic-score.m4a')} volume={0.72} />
+      <Audio
+        src={staticFile('assets/cosmic-score-v2.m4a')}
+        volume={(frame) =>
+          interpolate(
+            frame,
+            [0, 6 * fps, 8 * fps, 50 * fps, 54 * fps, 55 * fps],
+            [0.22, 0.18, 0.52, 0.52, 0.38, 0],
+            clamp,
+          )
+        }
+      />
     </AbsoluteFill>
   );
 };
