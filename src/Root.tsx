@@ -2,6 +2,13 @@ import React from 'react';
 import {AbsoluteFill, Composition, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {Audio} from '@remotion/media';
 import {FinalFilm} from './FinalFilm';
+import {Opening2D} from './Opening2D';
+import {MicroEntry} from './MicroEntry';
+import {ScaleAnalogy} from './ScaleAnalogy';
+import {OrbitEntry} from './OrbitEntry';
+import {GalaxyEntry} from './GalaxyEntry';
+import {PerspectiveTurn} from './PerspectiveTurn';
+import {Ending} from './Ending';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const fontFamily = '"Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif';
@@ -159,8 +166,121 @@ export const PourShot: React.FC = () => {
   );
 };
 
+const OpeningToMicro: React.FC = () => {
+  const {fps} = useVideoConfig();
+  return (
+    <AbsoluteFill>
+      <Sequence from={0} durationInFrames={102} premountFor={fps}>
+        <Opening2D shortHook />
+      </Sequence>
+      <Sequence from={102} durationInFrames={114} premountFor={fps}>
+        <MicroEntry />
+      </Sequence>
+    </AbsoluteFill>
+  );
+};
+
+const OpeningToScaleAnalogy: React.FC = () => {
+  const {fps} = useVideoConfig();
+  return (
+    <AbsoluteFill>
+      <Sequence from={0} durationInFrames={216} premountFor={fps}>
+        <OpeningToMicro />
+      </Sequence>
+      <Sequence from={216} durationInFrames={279} premountFor={fps}>
+        <ScaleAnalogy />
+      </Sequence>
+    </AbsoluteFill>
+  );
+};
+
+const OpeningToSolar: React.FC = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={495}><OpeningToScaleAnalogy/></Sequence>
+    <Sequence from={495} durationInFrames={270}><OrbitEntry/></Sequence>
+  </AbsoluteFill>
+);
+
+const OpeningToGalaxy: React.FC = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={765}><OpeningToSolar/></Sequence>
+    <Sequence from={765} durationInFrames={285}><GalaxyEntry/></Sequence>
+  </AbsoluteFill>
+);
+
+const OpeningToPerspective: React.FC = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={1050}><OpeningToGalaxy/></Sequence>
+    <Sequence from={1050} durationInFrames={360}><PerspectiveTurn/></Sequence>
+  </AbsoluteFill>
+);
+
+const WaterFilm2D: React.FC = () => (
+  <AbsoluteFill>
+    <Sequence from={0} durationInFrames={1410}><OpeningToPerspective/></Sequence>
+    <Sequence from={1410} durationInFrames={240}><Ending/></Sequence>
+  </AbsoluteFill>
+);
+
 export const RemotionRoot: React.FC = () => (
   <>
+    <Composition id="WaterFilm2D" component={WaterFilm2D} durationInFrames={1650} fps={30} width={1920} height={1080}/>
+    <Composition id="Ending" component={Ending} durationInFrames={240} fps={30} width={1920} height={1080}/>
+    <Composition id="PerspectiveTurn" component={PerspectiveTurn} durationInFrames={360} fps={30} width={1920} height={1080}/>
+    <Composition id="OpeningToPerspective" component={OpeningToPerspective} durationInFrames={1410} fps={30} width={1920} height={1080}/>
+    <Composition id="GalaxyEntry" component={GalaxyEntry} durationInFrames={285} fps={30} width={1920} height={1080}/>
+    <Composition id="OpeningToGalaxy" component={OpeningToGalaxy} durationInFrames={1050} fps={30} width={1920} height={1080}/>
+    <Composition id="OrbitEntry" component={OrbitEntry} durationInFrames={270} fps={30} width={1920} height={1080}/>
+    <Composition id="OpeningToSolar" component={OpeningToSolar} durationInFrames={765} fps={30} width={1920} height={1080}/>
+    <Composition
+      id="OpeningToScaleAnalogy"
+      component={OpeningToScaleAnalogy}
+      durationInFrames={495}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="ScaleAnalogy"
+      component={ScaleAnalogy}
+      durationInFrames={279}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="OpeningToMicro"
+      component={OpeningToMicro}
+      durationInFrames={216}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="MicroEntry"
+      component={MicroEntry}
+      durationInFrames={114}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="Opening2D"
+      component={Opening2D}
+      durationInFrames={210}
+      fps={30}
+      width={1920}
+      height={1080}
+    />
+    <Composition
+      id="Opening2DHook"
+      component={Opening2D}
+      durationInFrames={102}
+      fps={30}
+      width={1920}
+      height={1080}
+      defaultProps={{shortHook: true}}
+    />
     <Composition
       id="WaterSample"
       component={WaterSample}
