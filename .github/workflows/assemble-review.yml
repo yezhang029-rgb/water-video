@@ -1,0 +1,79 @@
+name: Assemble the 55-second review MP4
+
+on:
+  push:
+    branches:
+      - review/water-2d-55s
+    paths:
+      - .github/workflows/assemble-review.yml
+
+permissions:
+  contents: write
+
+jobs:
+  assemble:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Confirm the existing review release is still a draft
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/releases/431357873" > release.json
+          python - <<'PY'
+          import json
+          release = json.load(open('release.json'))
+          assert release['draft'] is True, 'Review release must remain a draft'
+          assert release['tag_name'] == 'review-latest'
+          assert all(a['name'] != 'step-06-55s-v1-full-review.mp4' for a in release['assets']), 'MP4 already exists; do not overwrite'
+          PY
+
+      - name: Download temporary parts from this same draft
+        run: |
+          gh release download review-latest \
+            --pattern '__transfer-step06-01.part' \
+            --pattern '__transfer-step06-02.part' \
+            --dir transfer
+
+      - name: Reassemble and verify the original bytes
+        run: |
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          parts = [
+              ('__transfer-step06-01.part', 6291456, 'ec05aebcbbb5a2f3b99052b100b2af3b41c60ddb7dbb57f0381eca3552172fc8'),
+              ('__transfer-step06-02.part', 5405855, '5282300326cb26f651afce6f7b52c3377f982f594688218d1a4d25f2f13ef926'),
+          ]
+          content = bytearray()
+          for name, size, digest in parts:
+              data = (Path('transfer') / name).read_bytes()
+              assert len(data) == size, f'Wrong part length: {name}'
+              assert hashlib.sha256(data).hexdigest() == digest, f'Wrong part digest: {name}'
+              content.extend(data)
+          assert len(content) == 11697311
+          assert hashlib.sha256(content).hexdigest() == '2efe7fbd44af8cb02daa6fcde60e6ff19d12fa37c4ad2452ea0a4e96ea3bcfc6'
+          target = Path('transfer/step-06-55s-v1-full-review.mp4')
+          target.write_bytes(content)
+          print(f'Original MP4 verified: {target.name}, {len(content)} bytes')
+          PY
+
+      - name: Upload the complete MP4 without publishing the draft
+        run: |
+          gh release upload review-latest transfer/step-06-55s-v1-full-review.mp4
+
+      - name: Verify the completed asset on GitHub
+        run: |
+          set -euo pipefail
+          gh api "repos/$GH_REPO/releases/431357873" > uploaded-release.json
+          python - <<'PY'
+          import json
+          release = json.load(open('uploaded-release.json'))
+          assert release['draft'] is True
+          asset = next(a for a in release['assets'] if a['name'] == 'step-06-55s-v1-full-review.mp4')
+          assert asset['state'] == 'uploaded'
+          assert asset['size'] == 11697311
+          assert asset['digest'] == 'sha256:2efe7fbd44af8cb02daa6fcde60e6ff19d12fa37c4ad2452ea0a4e96ea3bcfc6'
+          print('Complete MP4 uploaded and server digest verified. Release remains a draft.')
+          PY
