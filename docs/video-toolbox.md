@@ -49,6 +49,47 @@
 
 上表未覆盖截图中只有名称而没有清楚功能介绍的其他项目。拿到原链接后再补充，不据名称编造用途。
 
+## 当前兴趣与已核对的入口
+
+用户于2026-11-04明确关注HyperFrames、Remotion Superpowers、Teardown、DeepOpen-3D-Webs、PixelFX、Impeccable/Hallmark、Floorplan、ThinkRail/Claude-Mem、T3 Code/Mika/Agent Desktop及Hex。兴趣不等于已经安装或确定采用。Hex暂不急，设计工具也考虑用于封面。
+
+本次通过GitHub搜索及原仓库README核对了以下三个来源。其余条目仍处于截图初筛阶段。以下是说明用命令，本次未执行安装，也未运行第三方脚本；正式采用时再核对版本并记录。
+
+| 工具 | 原仓库 | 如何用到视频中 |
+| --- | --- | --- |
+| HyperFrames | https://github.com/heygen-com/hyperframes | 创建独立HTML视频测试项目，安装匹配版本的技能，再按简报制作与渲染；不是Remotion换肤包 |
+| Remotion Superpowers | https://github.com/DojoCodingLabs/remotion-superpowers | 在现有Remotion编写能力上增加素材、配音、音乐、字幕与审片流程；依赖相关服务配置，不等于15种画风 |
+| PixelFX | https://github.com/patch-gg/pixelfx | 选效果、调整调色板和时间，导出序列或接入画面；动态模拟需确定性处理，不能直接把实时动画循环搬进逐帧渲染 |
+
+HyperFrames的README给支持技能的代码助手提供核心技能安装命令：
+
+```bash
+npx hyperframes skills update
+```
+
+应在独立测试项目中按对应宿主说明安装，而非在框架源码仓库内随意覆盖技能。CLI模式要求Node环境；其README还提供桌面端与在线展示入口，可先看效果。
+
+Remotion Superpowers的README给Codex CLI列出的安装入口：
+
+```bash
+codex plugin marketplace add DojoCodingLabs/remotion-superpowers
+codex plugin add remotion-superpowers@remotion-superpowers
+```
+
+这针对支持相应命令的Codex CLI，不代表能从当前ChatGPT云端工作区自动修改所有客户端插件配置。先确认实际宿主、CLI版本及插件入口；云端会话是否加载成功需重新核实可用技能和工具。该仓库的完整流程还使用多个外部服务，API额度和费用不能因插件开源而视为免费。初次仅验证确实要用的能力。
+
+PixelFX可先浏览其README链接的画廊：https://patch-gg.github.io/pixelfx/ 。需要代码时，README提供：
+
+```bash
+npm i github:patch-gg/pixelfx
+```
+
+此命令只应在选择采用的独立测试工程中运行；实际采用前选定版本/提交并保留锁文件。其Claude Code技能安装与代码库安装是两回事，不承诺在当前Codex聊天里直接可调用。它也未必就是用户之前下载的“15个风格”，需原包名称或链接确认。
+
+## 推荐试用顺序
+
+先补齐长期方向和新片创意简报，再选择最小测试任务。若下片仍以代码动画为主，优先对比HyperFrames与Remotion，并按需要验证Superpowers的一项素材/审片能力。若题材是机械结构或空间镜头，则把相应专项工具提到前面。封面设计可以单独测试，不和全片渲染引擎绑定。记忆工具、遥控和输入工具按工作方式需要选用，不作为画风升级的前置安装。
+
 ## 推荐的项目组织方式
 
 每部独立视频通常使用一个项目仓库。同一系列若大量共享素材和组件，可以使用一个系列仓库。

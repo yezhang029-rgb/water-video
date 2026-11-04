@@ -4,6 +4,8 @@
 
 ## 从这里开始
 
+- [长期方向与当前项目记忆](docs/creative-memory.md)：已确认目标、待补充信息和当前状态。
+- [制作方法](docs/production-workflow.md)：先验证全片动态分镜，再逐镜精修，每次修改核对目的。
 - [55 秒作品的镜头、源码和复现方法](docs/2d-film.md)：当前组合是 `WaterFilm2D`。
 - [未来视频的工具选择与仓库管理](docs/video-toolbox.md)：工具用途、候选清单、安装位置及管理规则。
 - [GitHub 审片下载区](https://github.com/yezhang029-rgb/water-video/releases)：登录仓库所有者账号后查看草稿 `review-latest`，下载 `step-06-55s-v1-full-review.mp4`。
