@@ -55,6 +55,8 @@
 
 本次通过GitHub搜索及原仓库README核对了以下三个来源。其余条目仍处于截图初筛阶段。以下是说明用命令，本次未执行安装，也未运行第三方脚本；正式采用时再核对版本并记录。
 
+随后用户提供的15种MG风格库也已识别并核对README、模板及知识讲解提示词：[mg-styles-15](https://github.com/Vincentwei1021/mg-styles-15)。用途与15种风格索引见[风格参考库](style-library.md)。它是可选用的示例、提示词和源码，不是15个已加载插件。
+
 | 工具 | 原仓库 | 如何用到视频中 |
 | --- | --- | --- |
 | HyperFrames | https://github.com/heygen-com/hyperframes | 创建独立HTML视频测试项目，安装匹配版本的技能，再按简报制作与渲染；不是Remotion换肤包 |
@@ -84,7 +86,7 @@ PixelFX可先浏览其README链接的画廊：https://patch-gg.github.io/pixelfx
 npm i github:patch-gg/pixelfx
 ```
 
-此命令只应在选择采用的独立测试工程中运行；实际采用前选定版本/提交并保留锁文件。其Claude Code技能安装与代码库安装是两回事，不承诺在当前Codex聊天里直接可调用。它也未必就是用户之前下载的“15个风格”，需原包名称或链接确认。
+此命令只应在选择采用的独立测试工程中运行；实际采用前选定版本/提交并保留锁文件。其Claude Code技能安装与代码库安装是两回事，不承诺在当前Codex聊天里直接可调用。PixelFX不是已确认的mg-styles-15；前者是专项像素特效库，后者含多种MG风格，其中一种是像素风。
 
 ## 推荐试用顺序
 
