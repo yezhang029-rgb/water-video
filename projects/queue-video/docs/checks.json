@@ -1,0 +1,14 @@
+{
+  "shots": 30,
+  "frames": 4500,
+  "seconds": 150,
+  "captions": 27,
+  "captionText": "matches source storyboard",
+  "minimumFullyReadableMs": 2500,
+  "serviceExample": {
+    "leftSeconds": 4,
+    "rightSeconds": 6,
+    "heroExcluded": true
+  },
+  "renderAndSubjectiveReview": "see status.md and delivery.json"
+}

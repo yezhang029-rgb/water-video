@@ -3,6 +3,7 @@
   "scripts": {
     "studio": "remotion studio src/index.ts --no-open",
     "typecheck": "tsc --noEmit",
+    "check": "node scripts/check-project.mjs && tsc --noEmit",
     "render:review": "remotion render src/index.ts QueueFilm out/queue-A-v01-review.mp4 --scale=0.5 --codec=h264 --crf=24 --browser-executable=/usr/bin/chromium --concurrency=4",
     "render:final": "remotion render src/index.ts QueueFilm out/queue-A-v01-1080p.mp4 --codec=h264 --crf=19 --browser-executable=/usr/bin/chromium --concurrency=4"
   },
