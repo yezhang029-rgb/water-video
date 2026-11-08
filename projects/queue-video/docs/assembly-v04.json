@@ -1,0 +1,20 @@
+{
+  "source": "out/queue-A-v03-1080p.mp4",
+  "sourceSha256": "e1e7020ab146b9617cb98c2385b69e40a3a2890cebe452a310afddf9dd64e438",
+  "copiedPrefixFrames": 4200,
+  "copiedPrefixSeconds": 140,
+  "prefixDecodedFrameHashesIdentical": true,
+  "prefixVideoReencoded": false,
+  "containerNote": "Concat injects SPS/PPS headers at some keyframes; decoded image hashes match",
+  "contiguousFrameTimestamps": true,
+  "renderedTailFrames": 435,
+  "renderedTailSeconds": 14.5,
+  "appendedSeconds": 4.5,
+  "finalFrames": 4635,
+  "finalVideoSeconds": 154.5,
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "output": "out/queue-A-v04-1080p.mp4",
+  "outputSha256": "bdabf90cfa777787780c40b4770688e92b426ae9f5118a9e1cc6d58166beaf84"
+}
