@@ -1,0 +1,8 @@
+{
+  "sampledPathPositions": 412,
+  "maxDeviationPx": 0.25,
+  "taskCardHeadCollisions": 0,
+  "workBridgeDrawCompleteSeconds": 1.95,
+  "ballTravelStartSeconds": 2.05,
+  "ending": "10-second continuous clock across A29/A30"
+}

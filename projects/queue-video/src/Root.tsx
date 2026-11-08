@@ -3,7 +3,7 @@ import {Composition,Series,staticFile,useVideoConfig} from 'remotion';
 import {Audio} from '@remotion/media';
 import {Shot} from './Shot';
 export const Film=()=>{const {fps}=useVideoConfig();return <>
- <Audio src={staticFile('audio/soundtrack.m4a')} premountFor={fps}/>
+ <Audio src={staticFile('audio/soundtrack-v02.m4a')} premountFor={fps}/>
  <Series>
  <Series.Sequence name="A01 换队的念头" durationInFrames={120} premountFor={fps}><Shot n={0}/></Series.Sequence>
  <Series.Sequence name="A02 换队" durationInFrames={120} premountFor={fps}><Shot n={1}/></Series.Sequence>
