@@ -10,7 +10,8 @@ const scenes=[...a.matchAll(/#### (A\d{2})｜([^\n]+)\n([\s\S]*?)(?=\n#### |$)/g
  const get=k=>m[3].match(new RegExp('\\*\\*'+k+'：\\*\\* ([^\\n]+)'))?.[1]||'';
  return {id:m[1],start,end,caption:get('字幕原文'),action:get('画面与动作'),camera:get('机位与转场'),sound:get('声音与节奏')};
 });
-if(scenes.length!==30||scenes[0].start!==0||scenes.at(-1).end!==4500||scenes.some((s,i)=>i&&s.start!==scenes[i-1].end))throw Error('Shot coverage mismatch');
+scenes.at(-1).end+=135;
+if(scenes.length!==30||scenes[0].start!==0||scenes.at(-1).end!==4635||scenes.some((s,i)=>i&&s.start!==scenes[i-1].end))throw Error('Shot coverage mismatch');
 writeFileSync('src/shots.json',JSON.stringify(scenes,null,2)+'\n');
 execFileSync(process.execPath,['scripts/prepare-captions.mjs'],{stdio:'inherit'});
-console.log('30 scenes / 4500 frames / 150 seconds verified');
+console.log('30 scenes / 4635 frames / 154.5 seconds verified');

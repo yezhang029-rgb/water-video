@@ -17,7 +17,7 @@ export function Shot({n}:{n:number}){
  const f=useCurrentFrame();const {fps}=useVideoConfig();const t=f/fps;const shot=shots[n];const dur=(shot.end-shot.start)/fps;
  const cap=captions.find(c=>c.startMs>=(shot.start/30)*1000&&c.startMs<(shot.end/30)*1000)?.text||'';
  const reference=references[shot.id as keyof typeof references];
- const capStart=n===15?3:.25;const capEnd=n===29?3.8:dur-.35;
+ const capStart=n===15?3:n===29?5.2:.25;const capEnd=n===29?8.5:dur-.35;
  const opacity=ease((t-capStart)/.15)*(1-ease((t-capEnd)/.15));
  const data=n>=28?<EndingScenes n={n} t={t}/>:n>=25?<FinalPaths n={n} t={t}/>:n===23?<WorkScene t={t}/>:n===18?<ChoiceScene t={t}/>:n<=2?<QueueScenes n={n} t={t} global={(shot.start+f)/fps}/>:n<=9?<ExperimentScenes n={n} t={t}/>:n<=18?<LifeScenes n={n} t={t}/>:n<=23?<ActionScenes n={n} t={t}/>:<ResolutionScenes n={n} t={t}/>;
  return <AbsoluteFill style={{background:C.bg,fontFamily:'"QueueNoto", "Noto Sans CJK SC", sans-serif',color:C.ink}}>

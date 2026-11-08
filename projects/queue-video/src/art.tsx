@@ -5,7 +5,7 @@ export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export const ease=(n:number)=>{const x=clamp(n);return x*x*(3-2*x)};
 export const tween=(t:number,a:number,b:number,x:number,y:number)=>x+(y-x)*ease((t-a)/(b-a));
 export const txt=(x:number,y:number,s:string,size=32,color=C.ink,anchor:'start'|'middle'|'end'='middle')=><text x={x} y={y} fontSize={size} fill={color} textAnchor={anchor} dominantBaseline="middle" fontWeight={600}>{s}</text>;
-export function Person({x,y,scale=1,hero=false,walk=0,look=0,arm=0,opacity=1}:{x:number;y:number;scale?:number;hero?:boolean;walk?:number;look?:number;arm?:number;opacity?:number}){
+export function Person({x,y,scale=1,hero=false,walk=0,look=0,arm=0,opacity=1,back=0}:{x:number;y:number;scale?:number;hero?:boolean;walk?:number;look?:number;arm?:number;opacity?:number;back?:number}){
  const col=hero?C.orange:C.ink;const step=Math.sin(walk)*12;
  return <g transform={`translate(${x} ${y}) scale(${scale})`} opacity={opacity}>
  <ellipse cy={87} rx={43} ry={10} fill={C.ink} opacity={.09}/>
@@ -13,8 +13,8 @@ export function Person({x,y,scale=1,hero=false,walk=0,look=0,arm=0,opacity=1}:{x
  <rect x={-31} y={-15} width={62} height={79} rx={29} fill={col}/>
  <path d={`M -28 6 Q -49 24 -41 ${42-step*.6} M 28 6 Q 45 ${25-arm*30} ${42+arm*14} ${42-arm*60}`} fill="none" stroke={col} strokeWidth={13} strokeLinecap="round"/>
  <circle cy={-49} r={30} fill={col}/>
- <circle cx={look*9-8} cy={-50} r={2.8} fill={hero?C.ink:C.bg}/><circle cx={look*9+6} cy={-50} r={2.8} fill={hero?C.ink:C.bg}/>
- {hero&&<><path d="M -23 -6 L 23 49" stroke={C.ink} strokeWidth={5}/><rect x={5} y={34} width={31} height={27} rx={7} fill={C.ink}/><path d="M 10 42 H 29" stroke={C.bg} strokeWidth={2}/></>}
+ <g opacity={1-back}><circle cx={look*9-8} cy={-50} r={2.8} fill={hero?C.ink:C.bg}/><circle cx={look*9+6} cy={-50} r={2.8} fill={hero?C.ink:C.bg}/></g>
+ {hero&&<><path d="M -23 -6 L 23 49" stroke={C.ink} strokeWidth={5}/><rect x={5-20*back} y={34} width={31} height={27} rx={7} fill={C.ink}/><path d={`M ${10-20*back} 42 H ${29-20*back}`} stroke={C.bg} strokeWidth={2}/></>}
  </g>;
 }
 export function Card({x,y,w=280,h=150,title='',sub='',color=C.white,stroke=C.line,rotate=0,children}:{x:number;y:number;w?:number;h?:number;title?:string;sub?:string;color?:string;stroke?:string;rotate?:number;children?:React.ReactNode}){

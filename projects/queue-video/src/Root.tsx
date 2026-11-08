@@ -3,7 +3,7 @@ import {Composition,Series,staticFile,useVideoConfig} from 'remotion';
 import {Audio} from '@remotion/media';
 import {Shot} from './Shot';
 export const Film=()=>{const {fps}=useVideoConfig();return <>
- <Audio src={staticFile('audio/soundtrack-v02.m4a')} premountFor={fps}/>
+ <Audio src={staticFile('audio/soundtrack-v04.m4a')} premountFor={fps}/>
  <Series>
  <Series.Sequence name="A01 换队的念头" durationInFrames={120} premountFor={fps}><Shot n={0}/></Series.Sequence>
  <Series.Sequence name="A02 换队" durationInFrames={120} premountFor={fps}><Shot n={1}/></Series.Sequence>
@@ -34,6 +34,6 @@ export const Film=()=>{const {fps}=useVideoConfig();return <>
  <Series.Sequence name="A27 收起统一刻度" durationInFrames={120} premountFor={fps}><Shot n={26}/></Series.Sequence>
  <Series.Sequence name="A28 自己的一步" durationInFrames={150} premountFor={fps}><Shot n={27}/></Series.Sequence>
  <Series.Sequence name="A29 回到队伍" durationInFrames={150} premountFor={fps}><Shot n={28}/></Series.Sequence>
- <Series.Sequence name="A30 先看清再往前" durationInFrames={150} premountFor={fps}><Shot n={29}/></Series.Sequence>
+ <Series.Sequence name="A30 先看清再往前" durationInFrames={285} premountFor={fps}><Shot n={29}/></Series.Sequence>
  </Series></>};
-export const Root=()=> <Composition id="QueueFilm" component={Film} width={1920} height={1080} fps={30} durationInFrames={4500}/>;
+export const Root=()=> <Composition id="QueueFilm" component={Film} width={1920} height={1080} fps={30} durationInFrames={4635}/>;

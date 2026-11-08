@@ -1,7 +1,7 @@
 {
   "shots": 30,
-  "frames": 4500,
-  "seconds": 150,
+  "frames": 4635,
+  "seconds": 154.5,
   "captions": 27,
   "captionText": "source text joined to one line; A09/A18 use documented theory summaries",
   "captionLines": 1,
@@ -11,5 +11,11 @@
     "rightSeconds": 6,
     "heroExcluded": true
   },
+  "extraEndingSeconds": 4.5,
+  "endingPhases": [
+    1,
+    2,
+    1.5
+  ],
   "renderAndSubjectiveReview": "see status.md and versioned delivery reports"
 }
