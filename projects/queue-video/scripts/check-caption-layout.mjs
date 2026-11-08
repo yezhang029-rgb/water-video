@@ -1,0 +1,23 @@
+import {readFileSync,writeFileSync} from 'node:fs';
+import {createRequire} from 'node:module';
+import assert from 'node:assert/strict';
+const require=createRequire(import.meta.url),{chromium}=require('playwright');
+const captions=JSON.parse(readFileSync('src/captions.json','utf8'));
+const credits=Object.values(JSON.parse(readFileSync('src/references.json','utf8')));
+const font=readFileSync('public/fonts/queue-noto.otf').toString('base64');
+const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const page=await browser.newPage({viewport:{width:1920,height:1080}});
+const result=await page.evaluate(async({captions,credits,font})=>{
+ const style=document.createElement('style');style.textContent=`@font-face{font-family:QueueNoto;src:url(data:font/otf;base64,${font});font-weight:100 900}`;document.head.append(style);
+ await document.fonts.load('800 60px QueueNoto');await document.fonts.ready;
+ const measure=(text,size,available)=>{const div=document.createElement('div');div.style.cssText=`position:absolute;width:${available}px;font:800 ${size}px/1.3 QueueNoto;white-space:nowrap;text-align:center`;
+ div.textContent=text;document.body.append(div);const range=document.createRange();range.selectNodeContents(div);const box=range.getBoundingClientRect();const result={text,width:box.width,available,height:box.height,overflow:box.width>available,lines:Math.round(div.offsetHeight/(size*1.3))};div.remove();return result};
+ return{captions:captions.map(c=>measure(c.text,60,1680)),credits:credits.map(c=>measure(c,30,1640))};
+},{captions,credits,font});
+await browser.close();
+assert(result.captions.every(c=>!c.overflow&&c.lines===1),'Bottom captions must fit on a single line');
+assert(result.credits.every(c=>!c.overflow),'Source label overflows');
+assert(!credits.some(c=>/[A-Za-z]/.test(c)),'Source labels must use Chinese names');
+assert(!credits.some(c=>/doi|https|完整论文/.test(c)),'Do not add the paper-link sentence');
+writeFileSync('docs/caption-layout-v03.json',JSON.stringify(result,null,2)+'\n');
+console.log({captions:result.captions.length,singleLine:true,largestCaptionWidth:Math.max(...result.captions.map(c=>c.width)),available:1680,chineseCredits:credits});

@@ -3,12 +3,13 @@
   "frames": 4500,
   "seconds": 150,
   "captions": 27,
-  "captionText": "matches source storyboard",
+  "captionText": "source text joined to one line; A09/A18 use documented theory summaries",
+  "captionLines": 1,
   "minimumFullyReadableMs": 2500,
   "serviceExample": {
     "leftSeconds": 4,
     "rightSeconds": 6,
     "heroExcluded": true
   },
-  "renderAndSubjectiveReview": "see status.md and delivery.json"
+  "renderAndSubjectiveReview": "see status.md and versioned delivery reports"
 }

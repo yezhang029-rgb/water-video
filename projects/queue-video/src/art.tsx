@@ -1,6 +1,6 @@
 import React from 'react';
 import {deskCurve} from './motion';
-export const C={bg:'#E8CBA4',ink:'#203A4A',orange:'#DE612D',green:'#227962',muted:'#576B69',light:'#CEBC9E',white:'#FFF0D7',line:'#AA8D6B'};
+export const C={bg:'#D7E0DC',ink:'#203A4A',orange:'#DE612D',green:'#227962',muted:'#576B69',light:'#BCC9C4',white:'#F4EBDD',line:'#939F96'};
 export const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 export const ease=(n:number)=>{const x=clamp(n);return x*x*(3-2*x)};
 export const tween=(t:number,a:number,b:number,x:number,y:number)=>x+(y-x)*ease((t-a)/(b-a));
