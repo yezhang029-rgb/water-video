@@ -17,6 +17,21 @@
   "fullDecode": "passed",
   "stage": "review revision; not final approval",
   "github": {
-    "status": "pending upload verification"
-  }
+    "status": "uploaded; service SHA-256 matches original file",
+    "releaseId": 438317999,
+    "assetId": 724282485,
+    "draft": true,
+    "url": "https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-3b5d599d54828e30016b",
+    "assemblyRunId": 42493040736,
+    "assemblyRunConclusion": "success",
+    "audioAsset": {"id":724277127,"name":"soundtrack-v04.m4a","bytes":3148525,"sha256":"8f8ffb0a88cf362045bee23ff851b3a282051b87e9a920d2f4a093b77ac991aa"}
+  },
+  "revision": 4,
+  "addedSeconds": 4.5,
+  "endingPhasesSeconds": [1, 2, 1.5],
+  "laneNumbersAndNumberTiles": "removed in the ending only",
+  "prefixPreserved": "First 140 seconds passed decoded-frame hash comparison; no prefix video re-encoding",
+  "frameTimestamps": "contiguous from 0 to frame 4634, no duplicated or missing frame timestamps",
+  "visualChecks": "Exported ending keyframes checked for turn, threshold crossing, camera follow, lighting and final hold; slogan appears once",
+  "audioApproval": "Footsteps and room tail added; no subjective listening approval claimed"
 }

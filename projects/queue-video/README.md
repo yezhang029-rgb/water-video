@@ -1,6 +1,6 @@
 # 排队｜为什么你换到哪条队，哪条队就变慢？
 
-第四版结尾修改中，154.5秒、30镜、1920×1080、30fps，无旁白。字幕全部一行，理论作者用中文。保留30帧，不制作60帧版。
+第四版审片已上传，154.5秒、30镜、1920×1080、30fps，无旁白。字幕全部一行，理论作者用中文。保留30帧，不制作60帧版。
 视觉：偏冷灰青背景、浅米色卡片、深蓝、朱橙主角、墨绿完成状态；SVG角色与物件均可编辑，不使用大型生成模型。
 
 ## 入口
@@ -10,6 +10,8 @@
 - [第二版审片修改](docs/revisions-v02.md)
 - [第三版审片修改与规格](docs/revisions-v03.md)
 - [第四版4.5秒结尾修改](docs/revisions-v04.md)
+- [第四版1080p下载页](https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-3b5d599d54828e30016b)
+- [第四版实际规格与校验](docs/delivery-v04.json)
 - [第三版1080p下载页](https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-cbed90808ff678810dd3)
 - [第三版实际规格与交付校验](docs/delivery-v03.json)
 - [第二版音乐编辑与动作声记录](docs/audio-edit-v02.json)
