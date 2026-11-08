@@ -1,6 +1,9 @@
 # 当前制作状态
 
-2026-11-08：第二版已交付。用户确认添加中文理论标注、底部字幕全部一行、背景比第二版冷一点。第三版修改与布局检查已完成，正在从源码直接导出1080p。见revisions-v03.md。
+2026-11-08：第三版1080p审片已上传并核验。中文理论标注、27条底部单行字幕、偏冷灰青背景已进入实际导出；前两版保持原样。见revisions-v03.md和delivery-v03.json。
+
+第三版入口：https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-cbed90808ff678810dd3 。文件queue-A-v03-1080p.mp4为11,994,975字节，原生1920×1080、30fps、4500帧，视频150秒。H.264 High、CRF19；AAC双声道48kHz。全文件解码通过，GitHub服务端SHA-256与原件一致。
+完整文件直传返回401后，使用两个临时分块在GitHub内组装，未转码、未降低分辨率；组装运行42486495512成功。临时分块和一次性工作流完成后清理，原始完整文件与旧版仍保留。
 
 第二版入口：https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-130f93571b27cb22a8fd 。视频queue-A-v02-review.mp4为7,775,368字节；帧数、音轨、全文件解码与服务端SHA-256已通过。仍是审片，音乐的主观自然程度需用户比较49–59秒和95秒。
 
