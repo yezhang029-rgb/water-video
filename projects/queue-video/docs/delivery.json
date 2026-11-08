@@ -1,0 +1,27 @@
+{
+  "file": "queue-A-v01-review.mp4",
+  "bytes": 7664390,
+  "sha256": "b434a033cceaf986da209e3156433637fc16375bff60e37fec301667187627bb",
+  "seconds": 150.016,
+  "frames": 4500,
+  "width": 960,
+  "height": 540,
+  "fps": "30/1",
+  "videoCodec": "h264",
+  "audioCodec": "aac",
+  "fullDecode": "passed",
+  "stage": "complete animatic; not final approval",
+  "github": {
+    "status": "uploaded and server SHA-256 matched",
+    "releaseId": 438148128,
+    "assetId": 723504930,
+    "draft": true,
+    "url": "https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-a1bf41a3d532044c42c2",
+    "sourceBranch": "video/queue-150s",
+    "audioAsset": {"id":723494689,"name":"soundtrack.m4a","bytes":3079148,"sha256":"f71fa156eb81f46f3cc62eab944a7ef48e91beadd8e4b140f7758de2d7775ef1"}
+  },
+  "audioPeakDbFS": -5.9,
+  "videoDurationSeconds": 150,
+  "containerNote": "AAC padding adds 0.016 seconds; video has exactly 4500 frames.",
+  "visualReview": "30 shot samples and full-file overview checked; path/caption collision corrected. Full subjective playback and music-join listening still pending."
+}
