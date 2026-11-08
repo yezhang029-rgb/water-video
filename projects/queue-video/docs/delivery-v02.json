@@ -1,0 +1,29 @@
+{
+  "file": "queue-A-v02-review.mp4",
+  "bytes": 7775368,
+  "sha256": "f36c405690b3dfb49702222c3f6e8465e17b1ff6ae51d63d977790245ba6e924",
+  "seconds": 150.016,
+  "frames": 4500,
+  "width": 960,
+  "height": 540,
+  "fps": "30/1",
+  "videoCodec": "h264",
+  "audioCodec": "aac",
+  "fullDecode": "passed",
+  "stage": "complete animatic; not final approval",
+  "github": {
+    "status": "uploaded; server SHA-256 matches local file",
+    "releaseId": 438173877,
+    "assetId": 723623441,
+    "draft": true,
+    "url": "https://github.com/yezhang029-rgb/water-video/releases/tag/untagged-130f93571b27cb22a8fd",
+    "audio": {"assetId":723612988,"name":"soundtrack-v02.m4a","bytes":3096447,"sha256":"785d17f0f6d3a89b463989e926eef06c270099fca18441b5265fc91306a7491c"}
+  },
+  "revision": 2,
+  "audioPeakDbFS": -6.1,
+  "videoSeconds": 150,
+  "containerNote": "0.016 seconds of AAC padding; video remains exactly 4500 frames",
+  "visualChecks": "Key exported frames at 68, 93, 118, 133, 137 and 148 seconds reviewed; curve/foot alignment, task-card placement and ending confirmed",
+  "motionChecks": "412 sampled points, maximum SVG path deviation 0.25px, no task-card/head overlaps",
+  "subjectiveAudioApproval": "Not claimed; user should compare 49–59 seconds and 95 seconds in V02"
+}
